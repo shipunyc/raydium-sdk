@@ -1253,38 +1253,42 @@ export class Liquidity extends Base {
     const endInstructionsType: InstructionType[] = []
     const signers: Signer[] = []
 
-    const _tokenAccountIn = await this._handleTokenAccount({
-      programId: TOKEN_PROGRAM_ID,
-      connection,
-      side: 'in',
-      amount: amountInRaw,
-      mint: tokenIn.mint,
-      tokenAccount: tokenAccountIn,
-      owner,
-      payer,
-      frontInstructions,
-      endInstructions,
-      signers,
-      bypassAssociatedCheck,
-      frontInstructionsType,
-      checkCreateATAOwner,
-    })
-    const _tokenAccountOut = await this._handleTokenAccount({
-      programId: TOKEN_PROGRAM_ID,
-      connection,
-      side: 'out',
-      amount: 0,
-      mint: tokenOut.mint,
-      tokenAccount: tokenAccountOut,
-      owner,
-      payer,
-      frontInstructions,
-      endInstructions,
-      signers,
-      bypassAssociatedCheck,
-      frontInstructionsType,
-      checkCreateATAOwner,
-    })
+    console.log('_handleTokenAccount and _handleTokenAccount');
+    const [_tokenAccountIn, _tokenAccountOut] = await Promise.all([
+      this._handleTokenAccount({
+        programId: TOKEN_PROGRAM_ID,
+        connection,
+        side: 'in',
+        amount: amountInRaw,
+        mint: tokenIn.mint,
+        tokenAccount: tokenAccountIn,
+        owner,
+        payer,
+        frontInstructions,
+        endInstructions,
+        signers,
+        bypassAssociatedCheck,
+        frontInstructionsType,
+        checkCreateATAOwner,
+      }),
+      this._handleTokenAccount({
+        programId: TOKEN_PROGRAM_ID,
+        connection,
+        side: 'out',
+        amount: 0,
+        mint: tokenOut.mint,
+        tokenAccount: tokenAccountOut,
+        owner,
+        payer,
+        frontInstructions,
+        endInstructions,
+        signers,
+        bypassAssociatedCheck,
+        frontInstructionsType,
+        checkCreateATAOwner,
+      })
+    ]);
+
 
     const ins = this.makeSwapInstruction({
       poolKeys,
