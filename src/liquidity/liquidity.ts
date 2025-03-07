@@ -1253,6 +1253,7 @@ export class Liquidity extends Base {
     const endInstructionsType: InstructionType[] = []
     const signers: Signer[] = []
 
+    console.log('get token account in and token account out');
     const [_tokenAccountIn, _tokenAccountOut] = await Promise.all([
       this._handleTokenAccount({
         programId: TOKEN_PROGRAM_ID,
